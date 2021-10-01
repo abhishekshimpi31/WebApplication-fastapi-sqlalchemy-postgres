@@ -16,15 +16,18 @@ from db.models.user import Users
 
 
 
-def create_userrole(user_role:UserRoleCreate, db:Session):
-    user = db.query(Users).filter(Users.email == user_role.email).first()
-    role = db.query(Role).filter(Role.name == user_role.name).first()
+def create_userrole(user_id:int, role_id:int, db:Session):
+    user = db.query(Users).filter(Users.user_id == user_id).first()
+    if not user:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"User with user id {user_id} not found")
+    role = db.query(Role).filter(Role.role_id == role_id).first()
+    if not role:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Role with role id {role_id} not found")
 
-    
     userrole = UserRole(user_id = user.user_id,
                         role_id = role.role_id)
 
-    
+
     db.add(userrole)
     db.commit()
     db.refresh(userrole)
@@ -36,15 +39,13 @@ def get_role(user_id:int, db:Session):
     return user_role
 
 
-def delete_user_role(user_name:str, db:Session, owner_id:int):
-    user = db.query(Users).filter(Users.full_name==user_name).first()
+def delete_user_role(user_id:int, db:Session, owner_id:int):
+    user = db.query(Users).filter(Users.user_id==user_id).first()
     if user is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,detail="Username not exist")
-
     existing_userrole = db.query(UserRole).filter(UserRole.user_id==user.user_id)
     if not existing_userrole.first():
         return 0
-
     existing_userrole.delete(synchronize_session=False)
     db.commit()
     return 1
