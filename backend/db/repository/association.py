@@ -1,6 +1,8 @@
+"""This file contain buisness logic for the association model"""
 from operator import and_
+from typing import List, Optional
 from db.session import get_db
-from fastapi.param_functions import Depends
+from fastapi.param_functions import Depends, Query
 from pydantic.types import UUID4
 from sqlalchemy.orm import Session
 import sys
@@ -14,21 +16,20 @@ from db.models.groupdevice import DeviceGroups, association
 
 
 
-def create_association(associate:AssociationCreate, db:Session, owner_id:int):
-    group = db.query(DeviceGroups).filter(DeviceGroups.group_name == associate.group_name).first()
-    device = db.query(Device).filter(Device.device_hostname == associate.device_hostname).first()
-
-
-    
+def create_association(group_id:int, owner_id:int, db:Session, device_id:Optional[List[int]]=Query(None)):
+    group = db.query(DeviceGroups).filter(DeviceGroups.group_id == group_id).first()
+    device = db.query(Device).filter(Device.device_id == device_id).first()
     statement = association.insert().values(group_id=group.group_id, device_id=device.device_id, owner_id=owner_id)
     sys.setrecursionlimit(2000)
     db.execute(statement)
     db.commit()
-    return statement
+    return "Successfully Created"
 
 
-def delete_association_by_group(group_name:str, db:Session, owner_id:int):
-    group = db.query(DeviceGroups).filter(DeviceGroups.group_name == group_name).first()
+
+
+def delete_association_by_group(group_id:int, db:Session, owner_id:int):
+    group = db.query(DeviceGroups).filter(DeviceGroups.group_id == group_id).first()
 
 
     statement = association.delete().where(association.c.group_id == group.group_id)
@@ -38,8 +39,8 @@ def delete_association_by_group(group_name:str, db:Session, owner_id:int):
     return statement
 
 
-def delete_association_by_device(device_hostname:str, db:Session, owner_id:int):
-    device = db.query(Device).filter(Device.device_hostname == device_hostname).first()
+def delete_association_by_device(device_id:int, db:Session, owner_id:int):
+    device = db.query(Device).filter(Device.device_id == device_id).first()
 
 
     statement = association.delete().where(association.c.device_id == device.device_id)
@@ -49,9 +50,9 @@ def delete_association_by_device(device_hostname:str, db:Session, owner_id:int):
     return statement
 
 
-def delete_association(associate:AssociationCreate, db:Session, owner_id:int):
-    group = db.query(DeviceGroups).filter(DeviceGroups.group_name == associate.group_name).first()
-    device = db.query(Device).filter(Device.device_hostname == associate.device_hostname).first()
+def delete_association(group_id:int, device_id:int, owner_id:int, db:Session):
+    group = db.query(DeviceGroups).filter(DeviceGroups.group_id == group_id).first()
+    device = db.query(Device).filter(Device.device_id == device_id).first()
 
 
     statement = association.delete().where(association.c.group_id == group.group_id, association.c.device_id == device.device_id)
@@ -59,7 +60,5 @@ def delete_association(associate:AssociationCreate, db:Session, owner_id:int):
     db.execute(statement)
     db.commit()
     return statement
-
-
 
 
