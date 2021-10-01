@@ -9,5 +9,4 @@ class Role(Base):
     name = Column(String, nullable=False, unique=True)
     rights = Column(String, nullable=False, unique=True)
 
-    userrole = relationship("UserRole")
-
+    userrole = relationship("UserRole", back_populates="role", uselist=False)
