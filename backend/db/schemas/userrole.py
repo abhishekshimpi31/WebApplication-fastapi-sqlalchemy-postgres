@@ -5,10 +5,6 @@ from pydantic.networks import EmailStr
 
 
 class UserRoleCreate(BaseModel):
-    email: Optional[EmailStr]
-    name: Optional[str]
-
-
-
-
+    user_id: Optional[int]
+    role_id: Optional[int]
 
