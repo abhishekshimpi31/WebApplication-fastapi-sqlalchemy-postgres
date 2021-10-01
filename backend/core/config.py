@@ -23,5 +23,9 @@ class Settings:
 
     TEST_USER_EMAIL = "test@example.com"
 
+    ADMIN:int = 1
+    MANAGER: int = 2
+    USER: int = 3
+
 
 settings = Settings()
