@@ -15,6 +15,13 @@ class UserCreate(BaseModel):
     updated_on: date = datetime.now().date()
 
 
+class UserCreate_test(BaseModel):
+    email: EmailStr
+    password: str
+
+
+
+
 
 class ShowUser(BaseModel):
     full_name: str
