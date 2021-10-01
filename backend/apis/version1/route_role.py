@@ -11,7 +11,7 @@ from db.schemas.role import RoleBase
 router = APIRouter()
 
 
-@router.post("/create")
+@router.post("/role")
 def create_new_role(role:RoleBase, db: Session=Depends(get_db)):
     role = create_role(role=role, db=db)
     return role
