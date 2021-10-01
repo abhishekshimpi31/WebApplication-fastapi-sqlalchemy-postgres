@@ -1,4 +1,6 @@
-#from db.repository.userrole import retrived_userrole
+"""This file contain buisness logic for the role model"""
+
+
 from sqlalchemy.orm import Session
 
 
