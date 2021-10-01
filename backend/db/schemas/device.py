@@ -38,10 +38,7 @@ class ShowDevice(BaseModel):
     device_location: str
     updated_by: str
     created_on: date
-    updated_on: date 
+    updated_on: date
 
     class Config():
         orm_mode = True
-
-
-
