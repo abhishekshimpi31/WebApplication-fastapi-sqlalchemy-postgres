@@ -13,8 +13,8 @@ from db.repository.userrole import create_userrole
 router = APIRouter()
 
 
-@router.post("/assign-user-role")
-def assign_user_role(user_role:UserRoleCreate, db:Session = Depends(get_db), ):
+@router.post("/userrole")
+def assign_user_role(user_id:int, role_id:int, db:Session = Depends(get_db), ):
 
-    user_role = create_userrole(user_role=user_role, db=db)
+    user_role = create_userrole(user_id=user_id, role_id=role_id, db=db)
     return user_role
