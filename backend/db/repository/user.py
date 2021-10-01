@@ -39,13 +39,13 @@ def list_users(db: Session):
     return user
 
 
-def retrived_user(email:EmailStr, db: Session):
-    user =  db.query(Users).filter(email == Users.email).first()
+def retrived_user(user_id:int, db: Session):
+    user =  db.query(Users).filter(user_id == Users.user_id).first()
     return user
 
 
-def delete_user(email:EmailStr, owner_id: int, db: Session):
-    existing_user = db.query(Users).filter(Users.email == email)
+def delete_user(user_id:int, owner_id: int, db: Session):
+    existing_user = db.query(Users).filter(Users.user_id == user_id)
     if not existing_user.first():
         return 0
     existing_user.delete(synchronize_session=False)
