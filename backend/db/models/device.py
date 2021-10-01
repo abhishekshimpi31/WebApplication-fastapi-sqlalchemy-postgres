@@ -20,4 +20,4 @@ class Device(Base):
     user = relationship('Users', back_populates='device')
     #groupasso = relationship("GroupDevice",secondary='AssociationTable',back_populates="deviceasso")
     subcribers = relationship("DeviceGroups",secondary=association,back_populates="subscription")
-    
+
