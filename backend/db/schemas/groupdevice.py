@@ -33,11 +33,8 @@ class ShowGroup(BaseModel):
     group_description: str
     created_by: str
     updated_by: str
-    created_on: date 
+    created_on: date
     updated_on: date
 
     class Config():
         orm_mode = True
-
-
-
