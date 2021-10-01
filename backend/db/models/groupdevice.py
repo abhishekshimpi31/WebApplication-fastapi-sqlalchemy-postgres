@@ -4,7 +4,6 @@ from sqlalchemy import String, Boolean, Date, ForeignKey, Integer, Column, Table
 
 from db.base_class import Base
 
-#from association import association_table
 
 association = Table('association', Base.metadata,
     Column('group_id',Integer, ForeignKey('devicegroups.group_id'), primary_key=True),
