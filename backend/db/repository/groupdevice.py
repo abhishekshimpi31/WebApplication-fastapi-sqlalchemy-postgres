@@ -26,8 +26,8 @@ def create_group(group: GroupCreate, db: Session, owner_id: int):
     return gpdevice
 
 
-def retrived_group(group_name:str, db: Session):
-    group =  db.query(DeviceGroups).filter(group_name == DeviceGroups.group_name).first()
+def retrived_group(group_id:int, db: Session):
+    group =  db.query(DeviceGroups).filter(group_id == DeviceGroups.group_id).first()
     return group
 
 
@@ -36,8 +36,8 @@ def list_groups(db: Session):
     return group
 
 
-def update_group(group_name: str, db: Session, group: GroupUpdate, owner_id: int):
-    existing_group = db.query(DeviceGroups).filter(DeviceGroups.group_name == group_name)
+def update_group(group_id: int, db: Session, group: GroupUpdate, owner_id: int):
+    existing_group = db.query(DeviceGroups).filter(DeviceGroups.group_id == group_id)
     if not existing_group.first():
         return 0
     existing_group.update(group.__dict__)
@@ -45,8 +45,8 @@ def update_group(group_name: str, db: Session, group: GroupUpdate, owner_id: int
     return 1
 
 
-def delete_group(group_name: str, owner_id: int, db: Session):
-    existing_group = db.query(DeviceGroups).filter(DeviceGroups.group_name == group_name)
+def delete_group(group_id: int, owner_id: int, db: Session):
+    existing_group = db.query(DeviceGroups).filter(DeviceGroups.group_id == group_id)
     if not existing_group.first():
         return 0
     existing_group.delete(synchronize_session=False)
@@ -54,8 +54,8 @@ def delete_group(group_name: str, owner_id: int, db: Session):
     return 1
 
 
-def devices_present_in_group(group_name: str, db:Session):
-    group = db.query(DeviceGroups).filter(DeviceGroups.group_name == group_name).first()
+def devices_present_in_group(group_id: int, db:Session):
+    group = db.query(DeviceGroups).filter(DeviceGroups.group_id == group_id).first()
     if group is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,detail="Group not found")
     sys.setrecursionlimit(2000)
@@ -63,7 +63,3 @@ def devices_present_in_group(group_name: str, db:Session):
     device_in_group = select([Device.device_hostname]).filter(association.c.group_id==group.group_id).select_from(device_list)
     result = db.execute(device_in_group)
     return result.fetchall()
-
-
-
-
